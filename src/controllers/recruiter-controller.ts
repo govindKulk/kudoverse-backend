@@ -111,17 +111,7 @@ const postJob = async (req: Request, res: Response) => {
         return res.status(401).send('Unauthorized');
     }
 
-    // verify token
-    try {
-        const decoded = verifyToken(token);
-
-        if (decoded.user.role !== 'ADMIN'){
-            return res.status(401).send('Unauthorized');
-        }
-        req.body.user = decoded.user;
-    }catch(error){
-        return res.status(401).send('Unauthorized');
-    }
+    
     const { title, description, location, experience,company, url,salaryRange,skills, user } = req.body;
     
 
@@ -147,10 +137,29 @@ const postJob = async (req: Request, res: Response) => {
     return res.status(201).send(job);
 
 }
+const getAllApplicants = async (req: Request, res: Response) => {
+    console.log("in the controller")
+    try {
+        const {user} = req.body;
+        console.log("in the controller")
+        if(user.role !== 'ADMIN'){
+            return res.status(400).json({message: "Unauthorized"});
+        }
+        const applicants = await db.user.findMany({});
+        console.log(applicants)
+        return res.status(200).json({applicants})
+    }catch(e) {
+        console.log(e);
+        return res.status(500).json({message: 
+            "Internal Server Error"
+        })
+    }
+}
 
 export {
     getUser,
     createUser,
     loginUser,
-    postJob
+    postJob,
+    getAllApplicants
 }

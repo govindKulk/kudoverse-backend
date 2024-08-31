@@ -47,6 +47,7 @@ const createUser = async (req: Request, res: Response) => {
             }
         })
     } catch (error) {
+        console.log(error)
         return res.status(500).send('Error creating user');
     }
 
@@ -93,6 +94,22 @@ const loginUser = async (req: Request, res: Response) => {
     
 
 }
+
+const getApplications = async (req: Request, res: Response) => {
+    const {user} = req.body;
+    try {
+        const applications = await db.application.findMany({
+            where: {
+                userId: user.id
+            }
+        })
+
+        return res.status(200).json({applications});
+    }catch(error) {
+        console.log(error);
+        return res.status(500).json({error: "Internal Server Error"});
+    }
+}
 const uploadResume = (req: Request, res: Response) => { }
 const applyJob = (req: Request, res: Response) => { }
 
@@ -101,5 +118,6 @@ export {
     createUser,
     loginUser,
     uploadResume,
-    applyJob
+    applyJob,
+    getApplications
 }
