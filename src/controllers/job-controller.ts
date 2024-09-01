@@ -65,9 +65,50 @@ const applyJob = async (req: Request, res: Response) => {
     }
 
 }
+const editApplication = async (req: Request, res: Response) => {
+
+    const {jobId} = req.params;
+    try {
+        const {user, coverLetter} = req.body;
+
+        // check if already applied
+        const userApplication = await db.application.findFirst({
+            where: {
+                jobListingId: jobId,
+                userId: user.id
+            }
+        })
+
+        if(!userApplication){
+            return res.status(400).json({
+                message: "You have not yet applied on the job!"
+            })
+        }
+
+
+        const application = await db.application.update({
+            where: {
+                id: userApplication.id
+            },
+            data: {
+                userId: user.id,
+                jobListingId: jobId,
+                status: 'PENDING',
+                coverLetter
+            }
+        });
+        
+        return res.status(200).json({application});
+    }catch(error) {
+        console.log(error);
+        return res.status(500).json({error: "Internal server error"});
+    }
+
+}
 
 export {
     getAllJobs,
     getJob,
-    applyJob
+    applyJob,
+    editApplication
 }

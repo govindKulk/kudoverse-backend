@@ -15,6 +15,7 @@ const getUser = async (req: Request, res: Response) => {
         where: {
             id: userId
         }
+
     })
 
     if (!user) {
@@ -101,6 +102,9 @@ const getApplications = async (req: Request, res: Response) => {
         const applications = await db.application.findMany({
             where: {
                 userId: user.id
+            },
+            include: {
+                jobListing: {}
             }
         })
 
