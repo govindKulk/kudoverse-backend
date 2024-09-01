@@ -7,7 +7,11 @@ import cors from 'cors';
 
 const app = express();
 
-app.use(cors())
+app.use(cors(
+    {
+        allowedHeaders: ['Content-Type', 'Authorization'],
+    }
+))
 app.use(express.json());
 app.use(logger)
 

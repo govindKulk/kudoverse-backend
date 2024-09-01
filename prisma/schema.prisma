@@ -34,6 +34,7 @@ model Application {
   userId String
   user User @relation(fields: [userId], references: [id])
   jobListingId String
+  coverLetter String?
   jobListing JobListing @relation(fields: [jobListingId], references: [id], onDelete: Cascade)
   status Status?
   createdAt DateTime @default(now())
@@ -79,6 +80,7 @@ model User {
   isAdminVerified Boolean? @default(false)
   savedJobs String[]
   jobListings JobListing[]
+  resumeLink String?
 
 
 }

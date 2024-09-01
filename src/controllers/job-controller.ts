@@ -32,7 +32,7 @@ const applyJob = async (req: Request, res: Response) => {
 
     const {jobId} = req.params;
     try {
-        const {user} = req.body;
+        const {user, coverLetter} = req.body;
 
         // check if already applied
         const userApplication = await db.application.findFirst({
@@ -53,7 +53,8 @@ const applyJob = async (req: Request, res: Response) => {
             data: {
                 userId: user.id,
                 jobListingId: jobId,
-                status: 'PENDING'
+                status: 'PENDING',
+                coverLetter
             }
         });
         

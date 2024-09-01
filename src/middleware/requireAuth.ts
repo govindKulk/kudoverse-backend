@@ -7,6 +7,9 @@ export async function requireAuth(req: Request, res: Response, next: NextFunctio
         const token = authorization.split('Bearer ')[1];
         const decoded = verifyToken(token);
         console.log(decoded, "deocded")
+        if(!decoded.user){
+            throw new Error("Unauthorized!");
+        }
         req.body.user = decoded.user;
 
         next();
